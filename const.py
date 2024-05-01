@@ -36,7 +36,12 @@ class Filament:
             self.vendor_id = vendor_id
         if 0 < len(material) <= 64:
             self.material = material
-            if material not in ["PLA", "ABS", "PETG", "TPU", "Nylon", "PC", "PVA"]:
+            materials = ["PLA", "ABS", "PETG", "TPU", "Nylon", "PC", "PVA"]
+            cf_list = []
+            for material in materials:
+                cf_list.append(material + "-CF")
+            materials += cf_list
+            if material not in materials:
                 raise ValueError(f"Invalid material {material}")
         if float(price) > 0:
             self.price = float(price)
