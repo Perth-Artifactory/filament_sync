@@ -173,6 +173,8 @@ def all(mapping=False) -> list:
                     print("Invalid")
                     hex_s = input("Enter a hex code: ").lower()
                 colour_map[colour.lower()] = hex_s
+                colour_source = "hex"
+                colour = hex_s
                 # Write to file
                 with open("colour_map.json", "w") as f:
                     json.dump(colour_map, f, indent=4)
