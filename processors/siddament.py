@@ -111,6 +111,7 @@ def all(mapping=False) -> list:
 
             if '"' in colour:
                 temp = ""
+                apos = True
                 for char in colour:
                     if char == '"':
                         apos = True
