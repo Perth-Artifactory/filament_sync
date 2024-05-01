@@ -3,13 +3,19 @@ import requests
 
 
 def check_hex(s):
+    if len(s) == 0:
+        return False
+
     if s[0] == "#":
         s = s[1:]
+
     if len(s) != 6:
         return False
+
     for c in s:
         if c not in "0123456789ABCDEF":
             return False
+
     return True
 
 
@@ -62,16 +68,16 @@ class Filament:
         if settings_bed_temp >= 0:
             self.settings_bed_temp = settings_bed_temp
 
-        colour_map = {}
+        colour_map = {"silver": "585b51", "ash grey": "454343"}
 
         # Check if the color is a valid hex color
 
         hex = check_hex(colour_hex)
         if not hex:
             print(f"Colour is set to '{colour_hex}' which is not a hex code")
-            colour = input("Enter a hex code or A for auto: ")
-            if colour.lower() == "a":
-                if colour in colour_map:
+            colour = input("Enter a hex code or A for auto: ").lower()
+            if colour == "a":
+                if colour_hex in colour_map:
                     self.colour_hex = colour_map[colour]
                 else:
                     print("Auto selected but colour not mapped")
