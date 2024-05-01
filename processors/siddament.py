@@ -221,13 +221,17 @@ def all(mapping=False, daemon=False) -> list:
             )
 
             # ask if we should upload
+            upload = True
             if not mapping:
                 if not daemon:
                     q = input("Upload? [y/N]: ")
                     if q == "y":
-                        filament.upload()
+                        upload = filament.upload()
                 else:
-                    filament.upload()
+                    upload = filament.upload()
+
+            if not upload:
+                input()
 
             filaments.append(filament)
 

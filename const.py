@@ -131,3 +131,8 @@ class Filament:
         # Send data to spoolman
         r = requests.post(f"{config['spoolman_url']}/filament", json=self.formatted())
         print(r.status_code)
+        if r.status_code != 200:
+            print(f"Failed to upload filament: {r.text}")
+            return False
+        else:
+            return True
