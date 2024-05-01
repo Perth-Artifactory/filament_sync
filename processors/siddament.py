@@ -193,7 +193,7 @@ def all(mapping=False, daemon=False) -> list:
                 with open("colour_map.json", "w") as f:
                     json.dump(colour_map, f, indent=4)
 
-            if not mapping or daemon:
+            if not mapping or not daemon:
                 fin = input("Quit? (q): ")
                 if fin == "q":
                     return filaments
@@ -221,9 +221,12 @@ def all(mapping=False, daemon=False) -> list:
             )
 
             # ask if we should upload
-            if not mapping or daemon:
-                q = input("Upload? [y/N]: ")
-                if q == "y":
+            if not mapping:
+                if not daemon:
+                    q = input("Upload? [y/N]: ")
+                    if q == "y":
+                        filament.upload()
+                else:
                     filament.upload()
 
             filaments.append(filament)
