@@ -3,6 +3,7 @@ import re
 import sys
 import const
 import json
+import time
 
 
 def all(mapping=False, daemon=False) -> list:
@@ -227,8 +228,10 @@ def all(mapping=False, daemon=False) -> list:
                     q = input("Upload? [y/N]: ")
                     if q == "y":
                         upload = filament.upload()
+                        time.sleep(0.5)
                 else:
                     upload = filament.upload()
+                    time.sleep(0.5)
 
             if not upload:
                 input()
