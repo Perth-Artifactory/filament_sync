@@ -13,7 +13,7 @@ def check_hex(s):
         return False
 
     for c in s:
-        if c not in "0123456789ABCDEF":
+        if c not in "0123456789ABCDEFabcdef":
             return False
 
     return True
@@ -68,21 +68,14 @@ class Filament:
         if settings_bed_temp >= 0:
             self.settings_bed_temp = settings_bed_temp
 
-        colour_map = {"silver": "585b51", "ash grey": "454343"}
-
         # Check if the color is a valid hex color
 
         hex = check_hex(colour_hex)
         if not hex:
             print(f"Colour is set to '{colour_hex}' which is not a hex code")
-            colour = input("Enter a hex code or A for auto: ").lower()
-            if colour == "a":
-                if colour_hex in colour_map:
-                    self.colour_hex = colour_map[colour]
-                else:
-                    print("Auto selected but colour not mapped")
+            colour = input("Enter a hex code: ").lower()
             while not check_hex(colour):
-                colour = input("Enter a hex code: ")
+                colour = input("Enter a hex code: ").lower
             self.colour_hex = colour
         else:
             # strip hash

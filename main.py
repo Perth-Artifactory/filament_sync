@@ -4,7 +4,6 @@ import json
 import requests
 import sys
 
-
 # Load config
 with open("config.json", "r") as f:
     config = json.load(f)
@@ -21,10 +20,16 @@ if "version" not in spoolman_info:
 
 print(f"Connected to spoolman, version is: {spoolman_info['version']}")
 
+# Check for colour map mode
+if "-map" in sys.argv:
+    mapping = True
+else:
+    mapping = False
+
 processors = [siddament]
 
 filaments = []
 
 # iterate over processors
 for processor in processors:
-    filaments += processor.all()
+    filaments += processor.all(mapping=mapping)

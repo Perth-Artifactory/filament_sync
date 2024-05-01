@@ -2,9 +2,10 @@ from pprint import pprint
 import re
 import sys
 import const
+import json
 
 
-def all() -> list:
+def all(mapping=False) -> list:
     # Load the siddament.csv file
     with open("siddament.csv", "r", encoding="utf8") as f:
         # Read the file
@@ -141,6 +142,15 @@ def all() -> list:
             if colour == "":
                 colour = None
 
+            # load colour map from file
+            with open("colour_map.json", "r") as f:
+                colour_map = json.load(f)
+
+            if type(colour) == str:
+                if colour_source == "string" and colour.lower() in colour_map:
+                    colour = colour_map[colour.lower()]
+                    colour_source = "hex"
+
             pprint(filament_raw)
 
             if not material:
@@ -153,6 +163,19 @@ def all() -> list:
             print(f"Material: {material}")
             print(f"Weight: {weight}g")
             print(f"Colour: {colour}")
+
+            if mapping and colour_source == "string" and type(colour) == str:
+                print(
+                    f"In colour mapping mode and colour is '{colour}' which is not mapped or a hex code"
+                )
+                hex_s = input("Enter a hex code: ").lower()
+                while not const.check_hex(hex_s):
+                    print("Invalid")
+                    hex_s = input("Enter a hex code: ").lower()
+                colour_map[colour.lower()] = hex_s
+                # Write to file
+                with open("colour_map.json", "w") as f:
+                    json.dump(colour_map, f, indent=4)
 
             fin = input("Quit? (q): ")
             if fin == "q":
