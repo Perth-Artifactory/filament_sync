@@ -6,6 +6,14 @@ import requests
 from tabulate import tabulate
 import argparse
 
+
+def format_weight(weight: int | str) -> str:
+    weight = int(weight)
+    if weight < 999:
+        return f"{weight}g"
+    return f"{weight / 1000}kg"
+
+
 parser = argparse.ArgumentParser(description="Generate a report of spools")
 parser.add_argument("output", type=str, nargs="?", help="The output file")
 args = parser.parse_args()
@@ -55,7 +63,7 @@ for material in materials:
     weight = 0
     for spool in materials[material]:
         weight += spool["remaining_weight"]
-    outfile_contents.append(f"* Total weight: {weight / 1000}kg")
+    outfile_contents.append(f"* Total weight: {format_weight(weight)}")
     outfile_contents.append("")
 
     # Split spools into names
@@ -79,7 +87,7 @@ for material in materials:
     for name in spool_names:
         individual = ""
         for spool in spool_names[name]["spools"]:
-            individual += f"{spool / 1000}kg, "
+            individual += f"{format_weight(spool)}, "
 
         individual = individual[:-2]
 
@@ -87,7 +95,7 @@ for material in materials:
             [
                 f'[{name}]({spool_names[name]["url"]})',
                 len(spool_names[name]["spools"]),
-                f'{spool_names[name]["weight"] / 1000}kg',
+                f'{format_weight(spool_names[name]["weight"])}',
                 individual,
                 f'<span style="color:#{spool_names[name]["colour"]}">■</span>',
             ]
@@ -97,7 +105,6 @@ for material in materials:
 
     outfile_contents.append(table)
 
-    outfile_contents.append("------")
     outfile_contents.append("")
 
 if args.output:
