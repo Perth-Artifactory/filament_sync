@@ -62,6 +62,7 @@ def all(mapping=False) -> list:
                 "PETG",
                 "TPU",
                 "ASA",
+                "Nylon",
             ]:
                 if search in filament_raw.get("Name", ""):
                     material = search
