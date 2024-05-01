@@ -29,6 +29,9 @@ if "-map" in sys.argv:
 if "-d" in sys.argv:
     print("Daemon mode enabled. No prompts")
     daemon = True
+if daemon and mapping:
+    print("Cannot run in daemon and mapping mode")
+    sys.exit(1)
 
 processors = [siddament]
 

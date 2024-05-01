@@ -193,7 +193,7 @@ def all(mapping=False, daemon=False) -> list:
                 with open("colour_map.json", "w") as f:
                     json.dump(colour_map, f, indent=4)
 
-            if not mapping or not daemon:
+            if not mapping and not daemon:
                 fin = input("Quit? (q): ")
                 if fin == "q":
                     return filaments
