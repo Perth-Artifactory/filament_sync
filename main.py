@@ -20,11 +20,13 @@ if "version" not in spoolman_info:
 
 print(f"Connected to spoolman, version is: {spoolman_info['version']}")
 
-# Check for colour map mode
+# Check for colour map and daemon modes
+mapping = False
+daemon = False
 if "-map" in sys.argv:
     mapping = True
-else:
-    mapping = False
+if "-d" in sys.argv:
+    daemon = True
 
 processors = [siddament]
 
@@ -32,4 +34,4 @@ filaments = []
 
 # iterate over processors
 for processor in processors:
-    filaments += processor.all(mapping=mapping)
+    filaments += processor.all(mapping=mapping, daemon=daemon)

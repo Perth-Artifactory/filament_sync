@@ -5,7 +5,7 @@ import const
 import json
 
 
-def all(mapping=False) -> list:
+def all(mapping=False, daemon=False) -> list:
     # Load the siddament.csv file
     with open("siddament.csv", "r", encoding="utf8") as f:
         # Read the file
@@ -193,7 +193,7 @@ def all(mapping=False) -> list:
                 with open("colour_map.json", "w") as f:
                     json.dump(colour_map, f, indent=4)
 
-            if not mapping:
+            if not mapping or daemon:
                 fin = input("Quit? (q): ")
                 if fin == "q":
                     return filaments
@@ -221,7 +221,7 @@ def all(mapping=False) -> list:
             )
 
             # ask if we should upload
-            if not mapping:
+            if not mapping or daemon:
                 q = input("Upload? [y/N]: ")
                 if q == "y":
                     filament.upload()
