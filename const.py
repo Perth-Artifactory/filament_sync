@@ -27,8 +27,8 @@ class Filament:
             self.material = material
             if material not in ["PLA", "ABS", "PETG", "TPU", "Nylon", "PC", "PVA"]:
                 raise ValueError(f"Invalid material {material}")
-        if price > 0:
-            self.price = price
+        if float(price) > 0:
+            self.price = float(price)
         if density > 0:
             self.density = density
         if diameter > 0:
