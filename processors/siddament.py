@@ -79,6 +79,11 @@ def all(mapping=False) -> list:
             elif "g coil" in filament_raw.get("Variant Name", "").lower():
                 weight = filament_raw.get("Variant Name", "").lower().split("g coil")[0]
 
+            elif "g spool" in filament_raw.get("Variant Name", "").lower():
+                weight = (
+                    filament_raw.get("Variant Name", "").lower().split("g spool")[0]
+                )
+
             # Try to guess colour from name
             colour_source = "string"
             colour = filament_raw.get("Name", "").lower()
