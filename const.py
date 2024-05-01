@@ -35,6 +35,7 @@ class Filament:
         settings_extruder_temp: int = -1,
         settings_bed_temp: int = -1,
         colour_hex: str = "FFFFFF",
+        url: str = "",
     ):
         if 0 < len(name) <= 64:
             self.name = name
@@ -67,6 +68,8 @@ class Filament:
             self.settings_extruder_temp = settings_extruder_temp
         if settings_bed_temp >= 0:
             self.settings_bed_temp = settings_bed_temp
+        if len(url) > 0:
+            self.url = url
 
         # Check if the color is a valid hex color
 
@@ -115,6 +118,8 @@ class Filament:
             details["settings_bed_temp"] = self.settings_bed_temp
         if hasattr(self, "color_hex"):
             details["color_hex"] = self.colour_hex
+        if hasattr(self, "url"):
+            details["extra"] = {"url": self.url}
 
         return details
 

@@ -194,6 +194,7 @@ def all(mapping=False) -> list:
                 colour_hex=str(colour),
                 diameter=1.75,
                 density=1.25,
+                url=filament_raw.get("URL", ""),
             )
 
             # ask if we should upload
