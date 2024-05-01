@@ -25,7 +25,9 @@ mapping = False
 daemon = False
 if "-map" in sys.argv:
     mapping = True
+    print("Colour mapping mode enabled. No uploads, only mapping")
 if "-d" in sys.argv:
+    print("Daemon mode enabled. No prompts")
     daemon = True
 
 processors = [siddament]
