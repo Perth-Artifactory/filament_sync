@@ -6,7 +6,7 @@ import const
 
 def all() -> list:
     # Load the siddament.csv file
-    with open("siddament.csv", encoding="utf8") as f:
+    with open("siddament.csv", "r", encoding="utf8") as f:
         # Read the file
         data = f.read()
     # Split the data by newlines
@@ -149,12 +149,6 @@ def all() -> list:
             if weight < 51:
                 continue
 
-            if colour_source == "string":
-                print(f"Colour is set to '{colour}' which is not a hex code")
-                colour = input("Enter a hex code: ")
-            if type(colour) is not str or colour == "":
-                continue
-
             print(f"Is carbon: {carbon}")
             print(f"Material: {material}")
             print(f"Weight: {weight}g")
@@ -171,7 +165,7 @@ def all() -> list:
                 material=material,
                 price=filament_raw.get("Price", ""),
                 weight=weight,
-                color_hex=colour,
+                colour_hex=str(colour),
                 diameter=1.75,
                 density=1.25,
             )

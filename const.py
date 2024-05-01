@@ -2,6 +2,17 @@ import json
 import requests
 
 
+def check_hex(s):
+    if s[0] == "#":
+        s = s[1:]
+    if len(s) != 6:
+        return False
+    for c in s:
+        if c not in "0123456789ABCDEF":
+            return False
+    return True
+
+
 class Filament:
     def __init__(
         self,
@@ -17,7 +28,7 @@ class Filament:
         comment: str = "",
         settings_extruder_temp: int = -1,
         settings_bed_temp: int = -1,
-        color_hex: str = "FFFFFF",
+        colour_hex: str = "FFFFFF",
     ):
         if 0 < len(name) <= 64:
             self.name = name
@@ -47,19 +58,19 @@ class Filament:
             self.settings_bed_temp = settings_bed_temp
 
         # Check if the color is a valid hex color
-        if color_hex != "":
-            # strip the # if it is present
-            if color_hex[0] == "#":
-                color_hex = color_hex[1:]
-            # check the length
-            if len(color_hex) != 6:
-                raise ValueError("Invalid color (length)")
-            # check that all characters are hex
-            if not all(c in "0123456789ABCDEF" for c in color_hex):
-                raise ValueError("Invalid color (not hex)")
-            if len(color_hex) != 6:
-                raise ValueError("Invalid color (length)")
-            self.color_hex = color_hex
+
+        hex = check_hex(colour_hex)
+        if not hex:
+            print(f"Colour is set to '{colour_hex}' which is not a hex code")
+            colour = input("Enter a hex code: ")
+            while not check_hex(colour):
+                colour = input("Enter a hex code: ")
+            self.colour_hex = colour
+        else:
+            # strip hash
+            if colour_hex[0] == "#":
+                colour_hex = colour_hex[1:]
+            self.colour_hex = colour_hex
 
     def formatted(self) -> dict:
         details = {}
@@ -92,7 +103,7 @@ class Filament:
         if hasattr(self, "settings_bed_temp"):
             details["settings_bed_temp"] = self.settings_bed_temp
         if hasattr(self, "color_hex"):
-            details["color_hex"] = self.color_hex
+            details["color_hex"] = self.colour_hex
 
         return details
 
