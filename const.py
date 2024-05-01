@@ -1,5 +1,6 @@
 import json
 import requests
+from pprint import pprint
 
 
 def check_hex(s):
@@ -116,10 +117,10 @@ class Filament:
             details["settings_extruder_temp"] = self.settings_extruder_temp
         if hasattr(self, "settings_bed_temp"):
             details["settings_bed_temp"] = self.settings_bed_temp
-        if hasattr(self, "color_hex"):
+        if hasattr(self, "colour_hex"):
             details["color_hex"] = self.colour_hex
         if hasattr(self, "url"):
-            details["extra"] = {"url": self.url}
+            details["extra"] = {"url": f'"{self.url}"'}
 
         return details
 
@@ -133,6 +134,9 @@ class Filament:
         print(r.status_code)
         if r.status_code != 200:
             print(f"Failed to upload filament: {r.text}")
+            pprint(self.formatted())
+            # print the exact text request sent to the server
+            print(r.request)
             return False
         else:
             return True
