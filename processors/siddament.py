@@ -179,9 +179,10 @@ def all(mapping=False) -> list:
                 with open("colour_map.json", "w") as f:
                     json.dump(colour_map, f, indent=4)
 
-            fin = input("Quit? (q): ")
-            if fin == "q":
-                return filaments
+            if not mapping:
+                fin = input("Quit? (q): ")
+                if fin == "q":
+                    return filaments
 
             # Create the filament
             filament = const.Filament(
@@ -196,9 +197,10 @@ def all(mapping=False) -> list:
             )
 
             # ask if we should upload
-            q = input("Upload? [y/N]: ")
-            if q == "y":
-                filament.upload()
+            if not mapping:
+                q = input("Upload? [y/N]: ")
+                if q == "y":
+                    filament.upload()
 
             filaments.append(filament)
 
