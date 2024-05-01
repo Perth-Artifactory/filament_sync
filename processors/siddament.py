@@ -43,12 +43,15 @@ def all() -> list:
 
             # Check if the filament contains carbon fiber
             carbon = False
+            cf_suffix = ""
             for search in ["Carbon Fiber", "CF"]:
                 if search in filament_raw.get("Name", ""):
+                    cf_suffix = "-CF"
                     carbon = True
 
             # Look for standard filament materials in the name
             # When adding new materials here make sure that substrings are later in the list
+            material = "?"
             for search in [
                 "ABS Pro",
                 "PC-ABS",
@@ -62,6 +65,8 @@ def all() -> list:
                 if search in filament_raw.get("Name", ""):
                     material = search
                     break
+
+            material += cf_suffix
 
             # Check weight
             weight = 1000
@@ -154,7 +159,8 @@ def all() -> list:
             print(f"Material: {material}")
             print(f"Weight: {weight}g")
             print(f"Colour: {colour}")
-            fin = input()
+
+            fin = input("Quit? (q): ")
             if fin == "q":
                 return filaments
 
@@ -171,7 +177,7 @@ def all() -> list:
             )
 
             # ask if we should upload
-            q = input("Upload? y/N")
+            q = input("Upload? [y/N]: ")
             if q == "y":
                 filament.upload()
 
