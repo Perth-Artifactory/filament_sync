@@ -156,6 +156,13 @@ def all(mapping=False) -> list:
             if not material:
                 sys.exit(1)
 
+            try:
+                weight = float(weight)
+            except:
+                if type(weight) == str:
+                    weight = weight.replace("g", "")
+                    weight = float(weight)
+
             if weight < 51:
                 continue
 
