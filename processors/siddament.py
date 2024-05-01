@@ -192,6 +192,15 @@ def all(mapping=False) -> list:
                 if fin == "q":
                     return filaments
 
+            # Validate that price is a number
+            try:
+                float(filament_raw.get("Price", ""))
+            except:
+                print(
+                    f'Price is not a number: "{filament_raw.get("Price", "")}" - SKIPPED'
+                )
+                continue
+
             # Create the filament
             filament = const.Filament(
                 name=filament_raw.get("Name", ""),
