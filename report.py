@@ -77,7 +77,10 @@ for material in materials:
                 "spools": [],
                 "weight": 0,
                 "colour": colour,
-                "url": spool["filament"].get("extra", {"url": ""}).get("url", ""),
+                "url": spool["filament"]
+                .get("extra", {"url": ""})
+                .get("url", "")
+                .replace('"', ""),
             }
         spool_names[name]["spools"].append(spool["remaining_weight"])
         spool_names[name]["weight"] += spool["remaining_weight"]
