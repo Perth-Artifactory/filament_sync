@@ -20,6 +20,10 @@ def check_hex(s):
     return True
 
 
+def construct_spoolman_name(filament):
+    return f'{filament["name"]} - {filament.get("material","???")} ({filament["vendor"]["name"]})'
+
+
 class Filament:
     def __init__(
         self,
