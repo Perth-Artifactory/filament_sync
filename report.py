@@ -81,12 +81,18 @@ for material in materials:
                 .get("extra", {"url": ""})
                 .get("url", "")
                 .replace('"', ""),
+                "restocked": spool["filament"]
+                .get("extra", {"restock": "false"})
+                .get("restock", "false"),
+                "tier": spool["filament"].get("extra", {"tier": "0"}).get("tier", "0"),
             }
         spool_names[name]["spools"].append(spool["remaining_weight"])
         spool_names[name]["weight"] += spool["remaining_weight"]
 
     table_data = []
-    table_data.append(["Name", "Spools", "Total left", "Individual left", "Colour"])
+    table_data.append(
+        ["Name", "Spools", "Total left", "Individual left", "Colour", "Tier", "Stocked"]
+    )
     for name in spool_names:
         individual = ""
         for spool in spool_names[name]["spools"]:
@@ -101,6 +107,8 @@ for material in materials:
                 f'{format_weight(spool_names[name]["weight"])}',
                 individual,
                 f'<span style="color:#{spool_names[name]["colour"]}">■</span>',
+                f'Tier {spool_names[name]["tier"]}',
+                "✅" if spool_names[name]["restocked"] == "true" else "❌",
             ]
         )
 
