@@ -3,7 +3,7 @@ import json
 from pprint import pprint
 import argparse
 import sys
-import tabulate
+from tabulate import tabulate
 import const
 
 parser = argparse.ArgumentParser(
@@ -64,14 +64,28 @@ for filament in filaments:
             restock.append((filament, total_weight))
 
 table_data = []
-table_data.append(["Filament", "Weight Left", "Tier"])
+table_data.append(["Filament", "Weight Left", "Tier", "Spool cost"])
 for filament, weight in restock:
     table_data.append(
         [
             const.construct_spoolman_name(filament),
             weight,
             filament.get("extra", {"tier": 0}).get("tier", 0),
+            f'${filament.get("price", 0)}',
         ]
     )
 
-print(tabulate.tabulate(table_data, headers="firstrow"))
+table_data.append(
+    [
+        "",
+        "",
+        "",
+        f'${round(sum([filament.get("price", 0) for filament, weight in restock]))}',
+    ]
+)
+
+if args.output:
+    with open(args.output, "w") as f:
+        f.write(tabulate(table_data, headers="firstrow", tablefmt="pipe"))
+else:
+    print(tabulate(table_data, headers="firstrow", tablefmt="pipe"))
