@@ -41,6 +41,8 @@ for filament in filaments:
     new_info = {}
     new_info["spool_weight"] = spool_weight
 
+    print(const.construct_spoolman_name(filament))
+    pprint(new_info)
     # Write updated data back to spoolman
     r = requests.patch(
         f"{config['spoolman_url']}/filament/{filament['id']}", json=new_info
