@@ -68,7 +68,7 @@ table_data.append(["Filament", "Weight Left", "Tier", "Spool cost"])
 for filament, weight in restock:
     table_data.append(
         [
-            const.construct_spoolman_name(filament),
+            const.construct_spoolman_name(filament, link=True),
             weight,
             filament.get("extra", {"tier": 0}).get("tier", 0),
             f'${filament.get("price", 0)}',
