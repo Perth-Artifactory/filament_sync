@@ -20,8 +20,11 @@ def check_hex(s):
     return True
 
 
-def construct_spoolman_name(filament):
-    return f'{filament["name"]} - {filament.get("material","???")} ({filament["vendor"]["name"]})'
+def construct_spoolman_name(filament, link=False):
+    text = f'{filament["name"]} - {filament.get("material","???")} ({filament["vendor"]["name"]})'
+    if link and filament.get("extra", {}).get("url"):
+        text = f"[{text}]({filament['extra']['url']})"
+    return text
 
 
 class Filament:
