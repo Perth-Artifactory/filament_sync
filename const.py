@@ -21,9 +21,10 @@ def check_hex(s):
 
 
 def construct_spoolman_name(filament, link=False):
+    url = filament.get("extra", {}).get("url", "").replace('"', "")
     text = f'{filament["name"]} - {filament.get("material","???")} ({filament["vendor"]["name"]})'
-    if link and filament.get("extra", {}).get("url"):
-        text = f"[{text}]({filament['extra']['url'].replace('\"','')})"
+    if link and url:
+        text = f"[{text}]({url})"
     return text
 
 
