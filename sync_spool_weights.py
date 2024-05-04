@@ -22,8 +22,6 @@ if r.status_code != 200:
 
 print(f"Found {len(filaments)} filaments")
 
-# CHANGE SEARCH PATTERN HERE
-name_filter = re.compile(r"(.*)-filled Metal Composite")
 for filament in filaments:
     # Skip specific vendors
     if filament["vendor"]["name"] in ["Siddament"]:
