@@ -97,7 +97,7 @@ if args.wiki:
         content=tabulate(table_data, headers="firstrow", tablefmt="pipe") + "\n---\n",
         id=config["report_ids"]["restock"],
         timestamp=True,
-        force=True,
+        force=False,
     )
 
 if not args.outfile and not args.wiki:

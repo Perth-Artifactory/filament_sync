@@ -139,7 +139,7 @@ if args.wiki:
         content="\n".join(outfile_contents),
         id=config["report_ids"]["instock"],
         timestamp=True,
-        force=True,
+        force=False,
     )
 
 if not args.outfile and not args.wiki:
