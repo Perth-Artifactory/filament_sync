@@ -51,6 +51,7 @@ def write(content: str, id: int, timestamp=False, force=False):
 
     # Compare the new content with the old content
     if old_content == content and not force:
+        print("No changes to write")
         return
 
     else:
