@@ -54,10 +54,11 @@ for spool in spools:
         materials[spool["filament"]["material"]] = []
     materials[spool["filament"]["material"]].append(spool)
 
-print("--------------------------")
-outfile_contents = []
 
-for material in materials:
+print("--------------------------")
+
+outfile_contents = []
+for material in sorted(materials):
     outfile_contents.append(f"## {material}\n")
 
     outfile_contents.append(f"* Spools: {len(materials[material])}")
