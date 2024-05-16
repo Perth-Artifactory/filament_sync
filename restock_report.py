@@ -10,7 +10,7 @@ parser = argparse.ArgumentParser(
     description="Generate a report of spools that need restocking"
 )
 parser.add_argument("outfile", type=str, nargs="?", help="The output file")
-parser.add_argument("wiki", type=bool, nargs="?", help="Write to configured wiki page")
+parser.add_argument("--wiki", action="store_true", help="Write to configured wiki page")
 args = parser.parse_args()
 
 # Load config
