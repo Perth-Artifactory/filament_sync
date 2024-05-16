@@ -15,7 +15,8 @@ def format_weight(weight: int | str) -> str:
 
 
 parser = argparse.ArgumentParser(description="Generate a report of spools")
-parser.add_argument("output", type=str, nargs="?", help="The output file")
+parser.add_argument("outfile", type=str, nargs="?", help="The output file")
+parser.add_argument("wiki", type=bool, nargs="?", help="Write to configured wiki page")
 args = parser.parse_args()
 
 # Load config
@@ -91,7 +92,15 @@ for material in materials:
 
     table_data = []
     table_data.append(
-        ["Name", "Spools", "Total left", "Individual left", "Colour", "Tier", "Stocked"]
+        [
+            "Name",
+            "Spools",
+            "Total left",
+            "Individual left",
+            "Colour",
+            "Tier",
+            "Restocked when low",
+        ]
     )
     for name in spool_names:
         individual = ""
@@ -118,9 +127,20 @@ for material in materials:
 
     outfile_contents.append("")
 
-if args.output:
-    with open(args.output, "w") as f:
+if args.outfile:
+    with open(args.outfile, "w") as f:
         f.write("\n".join(outfile_contents))
-        print(f"Report written to {args.output}")
-else:
+        print(f"Report written to {args.outfile}")
+
+if args.wiki:
+    import wiki
+
+    wiki.write(
+        content="\n".join(outfile_contents),
+        id=config["report_ids"]["instock"],
+        timestamp=True,
+        force=True,
+    )
+
+if not args.outfile and not args.wiki:
     print("\n".join(outfile_contents))

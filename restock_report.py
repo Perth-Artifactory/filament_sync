@@ -9,7 +9,8 @@ import const
 parser = argparse.ArgumentParser(
     description="Generate a report of spools that need restocking"
 )
-parser.add_argument("output", type=str, nargs="?", help="The output file")
+parser.add_argument("outfile", type=str, nargs="?", help="The output file")
+parser.add_argument("wiki", type=bool, nargs="?", help="Write to configured wiki page")
 args = parser.parse_args()
 
 # Load config
@@ -84,8 +85,20 @@ table_data.append(
     ]
 )
 
-if args.output:
-    with open(args.output, "w") as f:
+if args.outfile:
+    with open(args.outfile, "w") as f:
         f.write(tabulate(table_data, headers="firstrow", tablefmt="pipe"))
-else:
+        print(f"Report written to {args.outfile}")
+
+if args.wiki:
+    import wiki
+
+    wiki.write(
+        content=tabulate(table_data, headers="firstrow", tablefmt="pipe") + "\n---\n",
+        id=config["report_ids"]["restock"],
+        timestamp=True,
+        force=True,
+    )
+
+if not args.outfile and not args.wiki:
     print(tabulate(table_data, headers="firstrow", tablefmt="pipe"))
