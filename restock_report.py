@@ -50,7 +50,7 @@ with open("upcoming_shipments.json", "r") as f:
     shipments = json.load(f)
 
 print(
-    f"Found {len(shipments)} shipments with {sum([len(s['items']) for s in shipments])} items"
+    f"Found {len(shipments)} shipments with {sum([len(shipments[s]) for s in shipments])} items"
 )
 
 # Iterate over filament and spools to find out which need restocking
@@ -71,11 +71,14 @@ for filament in filaments:
             total_weight = sum([spool["remaining_weight"] for spool in active_spools])
         # If the total weight is less than the threshold, add to restock list
         if total_weight < 300:
+            getting_restocked = False
             for shipment in shipments:
                 for item in shipments[shipment]:
                     if item == filament["id"]:
                         restocking.append((filament, shipment))
-            restock.append((filament, total_weight))
+                        getting_restocked = True
+            if not getting_restocked:
+                restock.append((filament, total_weight))
 
 restock_table_data = []
 restock_table_data.append(["Filament", "Weight Left", "Tier", "Spool cost"])
