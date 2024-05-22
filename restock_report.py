@@ -45,8 +45,17 @@ if r.status_code != 200:
 
 print(f"Found {len(spools)} spools")
 
+# Load a list of shipments
+with open("upcoming_shipments.json", "r") as f:
+    shipments = json.load(f)
+
+print(
+    f"Found {len(shipments)} shipments with {sum([len(s['items']) for s in shipments])} items"
+)
+
 # Iterate over filament and spools to find out which need restocking
 restock = []
+restocking = []
 for filament in filaments:
     if filament["extra"].get("restock") == "true":
         # Look for active spools of this filament
@@ -62,12 +71,16 @@ for filament in filaments:
             total_weight = sum([spool["remaining_weight"] for spool in active_spools])
         # If the total weight is less than the threshold, add to restock list
         if total_weight < 300:
+            for shipment in shipments:
+                for item in shipments[shipment]:
+                    if item == filament["id"]:
+                        restocking.append((filament, shipment))
             restock.append((filament, total_weight))
 
-table_data = []
-table_data.append(["Filament", "Weight Left", "Tier", "Spool cost"])
+restock_table_data = []
+restock_table_data.append(["Filament", "Weight Left", "Tier", "Spool cost"])
 for filament, weight in restock:
-    table_data.append(
+    restock_table_data.append(
         [
             const.construct_spoolman_name(filament, link=True),
             weight,
@@ -76,7 +89,7 @@ for filament, weight in restock:
         ]
     )
 
-table_data.append(
+restock_table_data.append(
     [
         "",
         "",
@@ -85,20 +98,42 @@ table_data.append(
     ]
 )
 
+restock_table = tabulate(restock_table_data, headers="firstrow", tablefmt="pipe")
+
+stocking_table_data = []
+stocking_table_data.append(["Filament", "Shipment"])
+for filament, shipment in restocking:
+    stocking_table_data.append(
+        [const.construct_spoolman_name(filament, link=True), shipment]
+    )
+
+stocking_table = tabulate(stocking_table_data, headers="firstrow", tablefmt="pipe")
+
+out = f"""## Filament needing restock
+
+{restock_table}
+
+## Filament being restocked
+
+{stocking_table}
+
+---
+"""
+
 if args.outfile:
     with open(args.outfile, "w") as f:
-        f.write(tabulate(table_data, headers="firstrow", tablefmt="pipe"))
+        f.write(out)
         print(f"Report written to {args.outfile}")
 
 if args.wiki:
     import wiki
 
     wiki.write(
-        content=tabulate(table_data, headers="firstrow", tablefmt="pipe") + "\n---\n",
+        content=out,
         id=config["report_ids"]["restock"],
         timestamp=True,
         force=False,
     )
 
 if not args.outfile and not args.wiki:
-    print(tabulate(table_data, headers="firstrow", tablefmt="pipe"))
+    print(out)
