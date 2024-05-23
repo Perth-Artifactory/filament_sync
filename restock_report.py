@@ -112,6 +112,19 @@ for filament, shipment in restocking:
 
 stocking_table = tabulate(stocking_table_data, headers="firstrow", tablefmt="pipe")
 
+shipment_table_data = []
+shipment_table_data.append(["Filament", "Shipment"])
+for shipment in shipments:
+    for item in shipments[shipment]:
+        # Find the item id in spoolman
+        for filament in filaments:
+            if filament["id"] == item:
+                shipment_table_data.append(
+                    [const.construct_spoolman_name(filament, link=True), shipment]
+                )
+
+shipment_table = tabulate(shipment_table_data, headers="firstrow", tablefmt="pipe")
+
 out = f"""## Filament needing restock
 
 {restock_table}
@@ -119,6 +132,10 @@ out = f"""## Filament needing restock
 ## Filament being restocked
 
 {stocking_table}
+
+## Full upcoming order contents
+
+{shipment_table}
 
 ---
 """
