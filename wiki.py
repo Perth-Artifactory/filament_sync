@@ -100,6 +100,3 @@ def write(content: str, id: int, timestamp=False, force=False):
 
     client.execute(mutation, variable_values={"id": id, "content": content})
     client.execute(render, variable_values={"id": id})
-
-
-write(content="Testing\na b c", id=961, timestamp=True, force=True)
