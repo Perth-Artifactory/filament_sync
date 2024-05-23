@@ -4,6 +4,7 @@ import sys
 import const
 import json
 import time
+import requests
 
 
 def all(mapping=False, daemon=False) -> list:
@@ -17,6 +18,25 @@ def all(mapping=False, daemon=False) -> list:
     header = data.pop(0)
     # Create a list to store the filaments
     filaments = []
+
+    # Construct a list of current filaments to avoid duplicates
+    current_filament = []
+
+    # Get the list of filament from spoolman
+    with open("config.json", "r") as f:
+        config = json.load(f)
+    r = requests.get(f"{config['spoolman_url']}/filament")
+
+    if r.status_code != 200:
+        print("Failed to get filament list")
+        sys.exit(1)
+
+    for filament in r.json():
+        if filament["vendor"]["name"] == "Siddament":
+            current_filament.append(const.construct_spoolman_name(filament))
+
+    print(f"Found {len(current_filament)} Siddament filaments in spoolman")
+
     # Iterate over the data
     for line in data:
         # Split the line by commas
@@ -194,10 +214,10 @@ def all(mapping=False, daemon=False) -> list:
                 with open("colour_map.json", "w") as f:
                     json.dump(colour_map, f, indent=4)
 
-            if not mapping and not daemon:
-                fin = input("Quit? (q): ")
-                if fin == "q":
-                    return filaments
+            # if not mapping and not daemon:
+            #    fin = input("Quit? (q): ")
+            #    if fin == "q":
+            #        return filaments
 
             # Validate that price is a number
             try:
@@ -208,9 +228,17 @@ def all(mapping=False, daemon=False) -> list:
                 )
                 continue
 
+            # Strip the material from the name
+            name = filament_raw.get("Name", "")
+            name = name.replace(material, "")
+            name = name.strip()
+            if name[-1] == "-":
+                name = name[:-1]
+                name = name.strip()
+
             # Create the filament
             filament = const.Filament(
-                name=filament_raw.get("Name", ""),
+                name=name,
                 vendor_id=1,
                 material=material,
                 price=filament_raw.get("Price", ""),
@@ -223,6 +251,15 @@ def all(mapping=False, daemon=False) -> list:
 
             # ask if we should upload
             upload = True
+            fake_spoolman = filament.formatted()
+            fake_spoolman["vendor"] = {"name": "Siddament"}
+            name = const.construct_spoolman_name(fake_spoolman)
+            if name in current_filament:
+                print(f"Filament '{name}' already exists in spoolman, skipping")
+                continue
+            else:
+                print(f"Filament '{name}' not found in spoolman")
+
             if not mapping:
                 if not daemon:
                     q = input("Upload? [y/N]: ")
