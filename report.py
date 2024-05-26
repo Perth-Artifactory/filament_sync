@@ -45,10 +45,14 @@ print(f"Found {len(spools)} spools")
 
 materials = {}
 
+total_spools = 0
+
 # Split spools up into materials
 for spool in spools:
     if spool["archived"]:
         continue
+
+    total_spools += 1
 
     if spool["filament"]["material"] not in materials:
         materials[spool["filament"]["material"]] = []
@@ -57,6 +61,7 @@ for spool in spools:
 
 print("--------------------------")
 
+total_weight = 0
 outfile_contents = []
 for material in sorted(materials):
     outfile_contents.append(f"## {material}\n")
@@ -65,6 +70,7 @@ for material in sorted(materials):
     weight = 0
     for spool in materials[material]:
         weight += spool["remaining_weight"]
+        total_weight += spool["remaining_weight"]
     outfile_contents.append(f"* Total weight: {format_weight(weight)}")
     outfile_contents.append("")
 
@@ -127,6 +133,11 @@ for material in sorted(materials):
     outfile_contents.append(table)
 
     outfile_contents.append("")
+
+outfile_contents.insert(0, f"Spools: {total_spools}")
+outfile_contents.insert(0, f"Total weight: {format_weight(total_weight)}")
+outfile_contents.insert(0, "")
+outfile_contents.insert(0, "## Summary")
 
 if args.outfile:
     with open(args.outfile, "w") as f:
