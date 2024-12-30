@@ -123,7 +123,7 @@ for material in sorted(materials):
                 f'{format_weight(spool_names[name]["weight"])}',
                 individual,
                 f'<span style="color:#{spool_names[name]["colour"]}">■</span>',
-                f'[Tier {spool_names[name]["tier"]}](https://wiki.artifactory.org.au/en/docs/policies/fees#training-fees)',
+                f'[Tier {spool_names[name]["tier"]}](https://wiki.artifactory.org.au/en/docs/policies/fees#h-3d-printer-fdm)',
                 "✅" if spool_names[name]["restocked"] == "true" else "❌",
             ]
         )
