@@ -82,8 +82,8 @@ class Filament:
 
         # Check if the color is a valid hex color
 
-        hex = check_hex(colour_hex)
-        if not hex:
+        valid_hex = check_hex(colour_hex)
+        if not valid_hex:
             print(f"Colour is set to '{colour_hex}' which is not a hex code")
             colour = input("Enter a hex code: ").lower()
             while not check_hex(colour):
