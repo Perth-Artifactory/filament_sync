@@ -23,23 +23,20 @@ if r.status_code != 200:
 print(f"Found {len(filaments)} filaments")
 
 # CHANGE SEARCH PATTERN HERE
-name_filter = re.compile(r"Matte (.*) PLA")
-
+name_filter = re.compile(r"Translucent (.*)")
 for filament in filaments:
-    if name_filter.match(filament["name"]):
+    new_info = {}
+    match = name_filter.match(filament["name"])
+    if match:
         print(f"{filament['name']} matches filter")
 
-        # CODE HERE
-        extra = filament.get("extra", {})
+        new_info["name"] = match.group(1)
+        new_info["material"] = f'{filament["material"]} (Translucent)'
 
-        # Add tier
-        extra["tier"] = "1"
-
-        # Add restock
-        extra["restock"] = "true"
+        pprint(new_info)
 
         # Write updated data back to spoolman
         r = requests.patch(
-            f"{config['spoolman_url']}/filament/{filament['id']}", json={"extra": extra}
+            f"{config['spoolman_url']}/filament/{filament['id']}", json=new_info
         )
         input()
