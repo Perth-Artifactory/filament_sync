@@ -174,7 +174,7 @@ def all(mapping=False, daemon=False) -> list:
             with open("colour_map.json", "r") as f:
                 colour_map = json.load(f)
 
-            if type(colour) == str:
+            if isinstance(colour, str):
                 if colour_source == "string" and colour.lower() in colour_map:
                     colour = colour_map[colour.lower()]
                     colour_source = "hex"
@@ -186,8 +186,8 @@ def all(mapping=False, daemon=False) -> list:
 
             try:
                 weight = float(weight)
-            except:
-                if type(weight) == str:
+            except ValueError:
+                if isinstance(weight, str):
                     weight = weight.replace("g", "")
                     weight = float(weight)
 
@@ -199,7 +199,7 @@ def all(mapping=False, daemon=False) -> list:
             print(f"Weight: {weight}g")
             print(f"Colour: {colour}")
 
-            if mapping and colour_source == "string" and type(colour) == str:
+            if mapping and colour_source == "string" and isinstance(colour, str):
                 print(
                     f"In colour mapping mode and colour is '{colour}' which is not mapped or a hex code"
                 )
@@ -214,15 +214,10 @@ def all(mapping=False, daemon=False) -> list:
                 with open("colour_map.json", "w") as f:
                     json.dump(colour_map, f, indent=4)
 
-            # if not mapping and not daemon:
-            #    fin = input("Quit? (q): ")
-            #    if fin == "q":
-            #        return filaments
-
             # Validate that price is a number
             try:
                 float(filament_raw.get("Price", ""))
-            except:
+            except ValueError:
                 print(
                     f'Price is not a number: "{filament_raw.get("Price", "")}" - SKIPPED'
                 )
