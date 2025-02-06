@@ -10,5 +10,9 @@
         "siddament",
         "spoolman",
         "tablefmt"
-    ]
+    ],
+    "sonarlint.connectedMode.project": {
+        "connectionId": "https-sq-artifactory-org-au",
+        "projectKey": "Perth-Artifactory_filament_sync_5001daad-953c-49fc-b1fe-d35ad5f0fb11"
+    }
 }
